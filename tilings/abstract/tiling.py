@@ -8,7 +8,7 @@ from PySide6.QtOpenGL import QOpenGLShaderProgram, QOpenGLShader, QOpenGLTexture
 from PySide6.QtOpenGLWidgets import QOpenGLWidget
 from PySide6.QtWidgets import QWidget, QVBoxLayout
 from numpy import array, float32
-
+from utils.path_helper import get_resource_path
 
 class TilingOptions(QWidget):
 
@@ -21,8 +21,8 @@ class TilingOptions(QWidget):
 
 
 class TilingDrawing(QOpenGLWidget):
-    VERTEX_SHADER = ""
-    FRAGMENT_SHADER = ""
+    VERTEX_SHADER = get_resource_path("")
+    FRAGMENT_SHADER = get_resource_path("")
 
     def __init__(self, parent: 'Tiling', path, img_size, corners):
         super().__init__(parent)

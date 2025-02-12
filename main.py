@@ -31,7 +31,7 @@ from tilings.euclidean.pmg.tiling import Tiling as EucTilingPMG
 from tilings.euclidean.pmm.tiling import Tiling as EucTilingPMM
 
 from tilings.hyperbolic.s46.tiling import Tiling as HypTiling46
-
+from utils.path_helper import get_resource_path
 
 class MainWidget(QWidget):
     def __init__(self, parent, *args, **kwargs):
@@ -256,7 +256,7 @@ class MainWindow(QMainWindow):
 
     def open_file(self):
         dialog = QFileDialog(self)
-        dialog.setDirectory(r'/Users/lamiremi/Downloads')
+        dialog.setDirectory(get_resource_path("downloads"))
         dialog.setFileMode(QFileDialog.FileMode.ExistingFiles)
         dialog.setNameFilter("Images (*.png *.jpg)")
         dialog.setViewMode(QFileDialog.ViewMode.List)

@@ -10,6 +10,7 @@ from tilings.abstract.tiling import Tiling as AbstractTiling
 from tilings.abstract.tiling import TilingDrawing as AbstractTilingDrawing
 from tilings.abstract.tiling import TilingOptions as AbstractTilingOptions
 from utils.quandrangles import parallelogram, rectangle, square, reflect
+from utils.path_helper import get_resource_path
 
 SCALE_MIN = 10
 SCALE_MAX = 80
@@ -28,8 +29,8 @@ SHAPES_NAME = {
 
 
 class TilingDrawing(AbstractTilingDrawing):
-    VERTEX_SHADER = "shaders/vertex.glsl"
-    FRAGMENT_SHADER = ""
+    VERTEX_SHADER = get_resource_path("shaders/vertex.glsl")
+    FRAGMENT_SHADER = get_resource_path("")
 
     def __init__(self, parent: 'Tiling', path, img_size, corners):
         super(TilingDrawing, self).__init__(parent, path, img_size, corners)

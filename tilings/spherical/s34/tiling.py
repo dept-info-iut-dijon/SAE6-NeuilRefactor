@@ -4,11 +4,11 @@ from numpy import array, cos, sin
 from tilings.spherical.tiling import Tiling as AbstractTiling
 from tilings.spherical.tiling import TilingDrawing as AbstractTilingDrawing
 from tilings.spherical.tiling import TilingOptions as AbstractTilingOptions
-
+from utils.path_helper import get_resource_path
 
 class TilingDrawing(AbstractTilingDrawing):
-    VERTEX_SHADER = "shaders/vertex.glsl"
-    FRAGMENT_SHADER = "tilings/spherical/s34/fragment.glsl"
+    VERTEX_SHADER = get_resource_path("shaders/vertex.glsl")
+    FRAGMENT_SHADER = get_resource_path("tilings/spherical/s34/fragment.glsl")
 
     def __init__(self, parent: 'Tiling', path, img_size, corners):
         super(TilingDrawing, self).__init__(parent, path, img_size, corners)
