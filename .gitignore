@@ -1,0 +1,29 @@
+# Dossiers et fichiers de compilation PyInstaller
+build/
+dist/
+*.spec
+
+# Caches Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Fichiers logs et temporaires
+*.log
+*.tmp
+*.bak
+
+# Configurations spécifiques des IDE
+.vscode/
+.idea/
+
+# Exclusion des fichiers d'environnement virtuel
+venv/
+.env/
+
+# Exclusion des images et assets temporaires
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
