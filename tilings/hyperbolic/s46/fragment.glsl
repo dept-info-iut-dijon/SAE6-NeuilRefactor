@@ -22,6 +22,7 @@ uniform mat3 shiftXP;
 uniform mat3 shiftXN;
 uniform mat3 shiftYP;
 uniform mat3 shiftYN;
+uniform vec4 backgroundColor;
 
 /*
  * Hyperboloid model H of the hyperbolic plane H2.
@@ -116,7 +117,7 @@ vec2 tileCoordsNaive(vec3 p) {
 void main() {
     vec2 q = 1.2 * v_text * (resolution / resolution.y);
     if (length(q) > 1.) {
-        f_color = vec4(1, 1, 1, 1);
+        f_color = backgroundColor;
         return;
     }
 
