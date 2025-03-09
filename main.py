@@ -6,6 +6,7 @@ from PySide6.QtGui import QSurfaceFormat, QAction, QKeySequence
 from PySide6.QtWidgets import QApplication, QWidget, QFileDialog, QGridLayout, QPushButton, QLabel, QMainWindow
 
 from tile import TileWidget
+from render_window import RenderWindow  # Import the new RenderWindow class
 
 from tilings.abstract.tiling import Tiling as AbstractTiling
 
@@ -55,13 +56,29 @@ class MainWidget(QWidget):
         self.reset_corners_btn.setEnabled(False)
 
         self.render_btn = QPushButton('Dessiner le pavage')
-        self.render_btn.clicked.connect(self.tile.render_tiling)
+        self.render_btn.clicked.connect(self.open_render_window)  # Changed to call our new function
         self.layout.addWidget(self.render_btn, 2, 1)
         self.render_btn.setEnabled(False)
 
         self.update_status_tip()
 
         self.show()
+
+    def open_render_window(self):
+        """
+        Open a new window to render the tiling
+        """
+        # Get the main window reference
+        main_window = self.parent()
+        
+        # Create and show the render window
+        if main_window.render_window is None:
+            main_window.render_window = RenderWindow(self.tile)
+        
+        main_window.render_window.show()
+        
+        # Also call the original render_tiling method
+        self.tile.render_tiling()
 
     def load_file(self, path):
         self.tile.path = path
