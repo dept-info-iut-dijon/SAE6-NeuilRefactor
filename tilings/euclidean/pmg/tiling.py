@@ -59,12 +59,12 @@ class TilingDrawing(AbstractTilingDrawing):
 
 class TilingOptions(AbstractTilingOptions):
     def __init__(self, parent: 'Tiling'):
-        super(TilingOptions, self).__init__(parent)
+        super().__init__(parent)
 
         self.select_reflection = QComboBox()
-        self.select_reflection.addItem("Axe des abscisses")
-        self.select_reflection.addItem("Axe ordonnées")
-        self.layout.addRow("Axe de la réflection", self.select_reflection)
+        self.select_reflection.addItem(self.window().tr('x_axis'))
+        self.select_reflection.addItem(self.window().tr('y_axis'))
+        self.layout.addRow(self.window().tr('reflection_axis'), self.select_reflection)
 
 
 class Tiling(AbstractTiling):

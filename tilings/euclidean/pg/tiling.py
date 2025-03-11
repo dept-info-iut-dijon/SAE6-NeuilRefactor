@@ -67,12 +67,12 @@ class TilingDrawing(AbstractTilingDrawing):
 
 class TilingOptions(AbstractTilingOptions):
     def __init__(self, parent: 'Tiling'):
-        super(TilingOptions, self).__init__(parent)
+        super().__init__(parent)
 
         self.select_glide = QComboBox()
-        self.select_glide.addItem("Axe des abscisses")
-        self.select_glide.addItem("Axe ordonnées")
-        self.layout.addRow("Axe de la translation glissée", self.select_glide)
+        self.select_glide.addItem(self.window().tr('x_axis'))
+        self.select_glide.addItem(self.window().tr('y_axis'))
+        self.layout.addRow(self.window().tr('glide_axis'), self.select_glide)
 
 
 class Tiling(AbstractTiling):

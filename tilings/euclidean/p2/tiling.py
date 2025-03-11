@@ -68,12 +68,12 @@ class TilingDrawing(AbstractTilingDrawing):
 
 class TilingOptions(AbstractTilingOptions):
     def __init__(self, parent: 'Tiling'):
-        super(TilingOptions, self).__init__(parent)
+        super().__init__(parent)
 
         self.select_rotation = QComboBox()
-        self.select_rotation.addItem("Axe des abscisses")
-        self.select_rotation.addItem("Axe ordonnées")
-        self.layout.addRow("\"Direction\" de la rotation", self.select_rotation)
+        self.select_rotation.addItem(self.window().tr('x_axis'))
+        self.select_rotation.addItem(self.window().tr('y_axis'))
+        self.layout.addRow(self.window().tr('rotation_direction'), self.select_rotation)
 
 
 class Tiling(AbstractTiling):
