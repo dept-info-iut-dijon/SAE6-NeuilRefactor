@@ -87,18 +87,18 @@ class TilingOptions(AbstractTilingOptions):
         self.speed1_slider.setMinimum(SPEED1_MIN)
         self.speed1_slider.setMaximum(SPEED1_MAX)
         self.speed1_slider.setValue(SPEED1_DEFAULT)
-        self.layout.addRow("Vitesse de rotation axe 1", self.speed1_slider)
+        self.layout.addRow(self.window().tr('rotation_speed_1'), self.speed1_slider)
 
         self.speed2_slider = QSlider()
         self.speed2_slider.setOrientation(Qt.Orientation.Horizontal)
         self.speed2_slider.setMinimum(SPEED2_MIN)
         self.speed2_slider.setMaximum(SPEED2_MAX)
         self.speed2_slider.setValue(SPEED2_DEFAULT)
-        self.layout.addRow("Vitesse de rotation axe 2", self.speed2_slider)
+        self.layout.addRow(self.window().tr('rotation_speed_2'), self.speed2_slider)
 
 
 class Tiling(AbstractTiling):
-    KIND = 'Pavage sphérique'
+    KIND = 'pavage_spherique'
 
     def __init__(self, path, img_size, corners, resolution=None):
         super(Tiling, self).__init__(path, img_size, corners, resolution)

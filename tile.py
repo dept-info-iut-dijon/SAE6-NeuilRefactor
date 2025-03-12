@@ -74,11 +74,16 @@ class TileWidget(QLabel):
     def mousePressEvent(self, event):
         self.add_corner(event.position())
 
-    def render_tiling(self, checked: bool, resolution=None):
-        self.render_window = self.tiling_cls.init(
-            self.path,
-            self.size(),
-            self.corners,
-            resolution
-        )
+    def render_tiling(self):
+        if self.tiling_cls is None:
+            return
+        if len(self.corners) != self.tiling_cls.CORNER_NB:
+            return
+        
+        # Créer la fenêtre de pavage
+        self.render_window = self.tiling_cls(self.path, self.pixmap().size(), self.corners)
+        # Propager la langue courante
+        self.render_window.current_language = self.window().current_language
+        # Forcer la mise à jour des traductions
+        self.render_window.update_translations()
         self.render_window.show()

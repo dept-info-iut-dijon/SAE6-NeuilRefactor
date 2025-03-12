@@ -113,9 +113,12 @@ class Tiling(QWidget):
 
     def __init__(self, path, img_size: QSize, corners: List[QPointF], resolution=None):
         super().__init__()
-
+        self.current_language = 'fr'  # Langue par défaut
+        
         self.resolution = resolution if resolution is not None else QSize(600, 600)
-        self.setWindowTitle(self.KIND)
+        # Traduire le titre en fonction de la langue courante
+        kind = self.KIND.lower().replace(' ', '_')
+        self.setWindowTitle(self.tr(kind))
 
         self.options = self.OPTIONS_CLASS.init(self)
         self.drawing = self.DRAWING_CLASS.init(self, path, img_size, corners)
@@ -125,6 +128,47 @@ class Tiling(QWidget):
         self.layout.addWidget(self.drawing)
         self.layout.addWidget(self.options)
 
+    def tr(self, key):
+        """Fonction helper pour obtenir la traduction"""
+        from main import translations  # Import ici pour éviter l'import circulaire
+        return translations[self.current_language].get(key, key)
+
     @classmethod
     def init(cls, path, img_size, corners, resolution=None):
         return cls(path, img_size, corners, resolution)
+
+    def update_translations(self):
+        """Met à jour toutes les traductions de l'interface"""
+        # Mettre à jour le titre de la fenêtre
+        self.setWindowTitle(self.tr(self.KIND))
+        
+        # Mettre à jour les options
+        if hasattr(self.options, 'scale_slider'):
+            self.options.layout.labelForField(self.options.scale_slider).setText(self.tr('scale'))
+        
+        if hasattr(self.options, 'angle_dial'):
+            self.options.layout.labelForField(self.options.angle_dial).setText(self.tr('rotation'))
+            
+        if hasattr(self.options, 'select_shape'):
+            self.options.layout.labelForField(self.options.select_shape).setText(self.tr('shape'))
+            # Mettre à jour les items du combobox
+            if hasattr(self, 'ALLOWED_SHAPES'):  # Vérifier si la classe a des formes autorisées
+                from tilings.euclidean.tiling import SHAPES_NAME  # Import local
+                self.options.select_shape.clear()
+                for key in self.ALLOWED_SHAPES:
+                    self.options.select_shape.addItem(self.tr(SHAPES_NAME[key]), key)
+                
+        if hasattr(self.options, 'select_rotation'):
+            self.options.layout.labelForField(self.options.select_rotation).setText(self.tr('rotation_direction'))
+            self.options.select_rotation.setItemText(0, self.tr('x_axis'))
+            self.options.select_rotation.setItemText(1, self.tr('y_axis'))
+            
+        if hasattr(self.options, 'select_reflection'):
+            self.options.layout.labelForField(self.options.select_reflection).setText(self.tr('reflection_axis'))
+            self.options.select_reflection.setItemText(0, self.tr('x_axis'))
+            self.options.select_reflection.setItemText(1, self.tr('y_axis'))
+            
+        if hasattr(self.options, 'select_glide'):
+            self.options.layout.labelForField(self.options.select_glide).setText(self.tr('glide_axis'))
+            self.options.select_glide.setItemText(0, self.tr('x_axis'))
+            self.options.select_glide.setItemText(1, self.tr('y_axis'))

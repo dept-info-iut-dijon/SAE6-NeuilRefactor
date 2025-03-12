@@ -68,8 +68,9 @@ class TilingOptions(AbstractTilingOptions):
 
 
 class Tiling(AbstractTiling):
+    KIND = 'pavage_euclidien'
     CODE = 'pmg (22*)'
-    SHAPE = "rectangle"
+    SHAPE = 'rectangle'
     CORNER_NB = 4
     DRAWING_CLASS = TilingDrawing
     OPTIONS_CLASS = TilingOptions

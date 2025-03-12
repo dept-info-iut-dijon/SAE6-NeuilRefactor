@@ -21,9 +21,9 @@ SHAPE_KEY_RECTANGLE = 1
 SHAPE_KEY_SQUARE = 2
 
 SHAPES_NAME = {
-    SHAPE_KEY_PARALLELOGRAM: 'Parallélogramme',
-    SHAPE_KEY_RECTANGLE: 'Rectangle',
-    SHAPE_KEY_SQUARE: 'Carré'
+    SHAPE_KEY_PARALLELOGRAM: 'parallelogram',
+    SHAPE_KEY_RECTANGLE: 'rectangle',
+    SHAPE_KEY_SQUARE: 'square'
 }
 
 
@@ -111,28 +111,33 @@ class TilingOptions(AbstractTilingOptions):
         super(TilingOptions, self).__init__(parent)
 
         self.setMinimumWidth(parent.resolution.width())
-
         self.layout = QFormLayout()
         self.setLayout(self.layout)
 
+        # Créer d'abord tous les widgets
         self.scale_slider = QSlider()
         self.scale_slider.setOrientation(Qt.Orientation.Horizontal)
         self.scale_slider.setMinimum(SCALE_MIN)
         self.scale_slider.setMaximum(SCALE_MAX)
         self.scale_slider.setValue(SCALE_DEFAULT)
-        self.layout.addRow("Échelle", self.scale_slider)
 
         self.angle_dial = QDial()
         self.angle_dial.setRange(0, 360)
-        self.layout.addRow("Rotation", self.angle_dial)
 
         self.select_shape = QComboBox()
-        for key in self.parent().ALLOWED_SHAPES:
-            self.select_shape.addItem(SHAPES_NAME[key], key)
+        
+        # Puis les ajouter au layout avec les traductions
+        self.layout.addRow(self.window().tr('scale'), self.scale_slider)
+        self.layout.addRow(self.window().tr('rotation'), self.angle_dial)
+        
+        # Remplir le combobox des formes si nécessaire
+        if hasattr(parent, 'ALLOWED_SHAPES'):
+            for key in parent.ALLOWED_SHAPES:
+                self.select_shape.addItem(self.window().tr(SHAPES_NAME[key]), key)
 
 
 class Tiling(AbstractTiling):
-    KIND = 'Pavage euclidien'
+    KIND = 'pavage_euclidien'
     ALLOWED_SHAPES = []
 
     def __init__(self, path, img_size, corners, resolution=None):
@@ -142,7 +147,7 @@ class Tiling(AbstractTiling):
         self.options.angle_dial.valueChanged.connect(self.update_angle)
 
         if len(self.ALLOWED_SHAPES) > 1:
-            self.options.layout.addRow("Forme", self.options.select_shape)
+            self.options.layout.addRow(self.window().tr('shape'), self.options.select_shape)
             self.options.select_shape.currentIndexChanged.connect(self.update_shape)
 
     def update_scale(self, value):

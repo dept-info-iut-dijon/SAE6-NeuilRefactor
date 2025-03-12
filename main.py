@@ -58,7 +58,14 @@ translations = {
         'scale': 'Échelle',
         'rotation': 'Rotation',
         'shape': 'Forme',
-        'no_options': 'Pas d\'options pour ce pavage'
+        'no_options': 'Pas d\'options pour ce pavage',
+        'abstract_tiling_class': 'Classe de pavage abstraite',
+        'pavage_euclidien': 'Pavage euclidien',
+        'pavage_spherique': 'Pavage sphérique',
+        'pavage_hyperbolique': 'Pavage hyperbolique',
+        'parallelogram': 'Parallélogramme',
+        'rectangle': 'Rectangle',
+        'square': 'Carré',
     },
     'en': {
         'title': 'File Manager',
@@ -91,7 +98,14 @@ translations = {
         'scale': 'Scale',
         'rotation': 'Rotation',
         'shape': 'Shape',
-        'no_options': 'No options for this tiling'
+        'no_options': 'No options for this tiling',
+        'abstract_tiling_class': 'Abstract Tiling Class',
+        'pavage_euclidien': 'Euclidean Tiling',
+        'pavage_spherique': 'Spherical Tiling',
+        'pavage_hyperbolique': 'Hyperbolic Tiling',
+        'parallelogram': 'Parallelogram',
+        'rectangle': 'Rectangle',
+        'square': 'Square',
     }
 }
 

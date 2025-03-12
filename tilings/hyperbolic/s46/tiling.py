@@ -71,21 +71,15 @@ class TilingDrawing(AbstractTilingDrawing):
 
 class TilingOptions(AbstractTilingOptions):
     def __init__(self, parent: 'Tiling'):
-        super(TilingOptions, self).__init__(parent)
-
-        self.setMinimumWidth(parent.resolution.width())
-
-        self.layout = QFormLayout()
-        self.setLayout(self.layout)
-
-        self.label = QLabel("Pas d'options pour ce pavage")
+        super().__init__(parent)
+        self.label = QLabel(self.window().tr('no_options'))
         self.layout.addRow(self.label)
 
 
 class Tiling(AbstractTiling):
-    KIND = 'Pavage hyperbolique'
+    KIND = 'pavage_hyperbolique'
     CODE = '{4,6}'
-    SHAPE = "carré"
+    SHAPE = 'square'
     CORNER_NB = 4
     DRAWING_CLASS = TilingDrawing
     OPTIONS_CLASS = TilingOptions
