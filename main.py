@@ -6,7 +6,7 @@ from PySide6.QtGui import QSurfaceFormat, QAction, QKeySequence
 from PySide6.QtWidgets import QApplication, QWidget, QFileDialog, QGridLayout, QPushButton, QLabel, QMainWindow
 
 from tile import TileWidget
-from render_window import RenderWindow  # Import the new RenderWindow class
+from render_window import RenderWindow
 
 from tilings.abstract.tiling import Tiling as AbstractTiling
 
@@ -56,29 +56,13 @@ class MainWidget(QWidget):
         self.reset_corners_btn.setEnabled(False)
 
         self.render_btn = QPushButton('Dessiner le pavage')
-        self.render_btn.clicked.connect(self.open_render_window)  # Changed to call our new function
+        self.render_btn.clicked.connect(self.tile.render_tiling)
         self.layout.addWidget(self.render_btn, 2, 1)
         self.render_btn.setEnabled(False)
 
         self.update_status_tip()
 
         self.show()
-
-    def open_render_window(self):
-        """
-        Open a new window to render the tiling
-        """
-        # Get the main window reference
-        main_window = self.parent()
-        
-        # Create and show the render window
-        if main_window.render_window is None:
-            main_window.render_window = RenderWindow(self.tile)
-        
-        main_window.render_window.show()
-        
-        # Also call the original render_tiling method
-        self.tile.render_tiling()
 
     def load_file(self, path):
         self.tile.path = path
@@ -172,11 +156,19 @@ class MainWindow(QMainWindow):
         close_action = QAction("Fermer", self)
         close_action.setShortcut(self.tr("CTRL+W"))
         close_action.triggered.connect(self.close)
-
+        
+        # Create a new action for opening the render window
+        render_action = QAction("Dessiner le pavage", self)
+        render_action.triggered.connect(self.open_render_window)
+        
         menu = self.menuBar()
         file_menu = menu.addMenu("Fichier")
         file_menu.addAction(open_file_action)
         file_menu.addAction(close_action)
+        
+        # Add a new menu for drawing
+        draw_menu = menu.addMenu("Dessin")
+        draw_menu.addAction(render_action)
 
         # Spherical tilings
         sph_34_action = QAction(SphTiling34.CODE, self)
@@ -270,6 +262,30 @@ class MainWindow(QMainWindow):
         status_bar = self.statusBar()
 
         self.render_window = None
+        
+    def open_render_window(self):
+        """
+        Open a new window to render the tiling
+        """
+        # Create a new render window each time or reuse existing one
+        if self.render_window is None or not self.render_window.isVisible():
+            self.render_window = RenderWindow(self)  # Pass self (MainWindow) as a reference
+        
+        # Show the window
+        self.render_window.show()
+        self.render_window.raise_()
+        self.render_window.activateWindow()
+
+    def open_file(self):
+        dialog = QFileDialog(self)
+        dialog.setDirectory(r'/Users/lamiremi/Downloads')
+        dialog.setFileMode(QFileDialog.FileMode.ExistingFiles)
+        dialog.setNameFilter("Images (*.png *.jpg)")
+        dialog.setViewMode(QFileDialog.ViewMode.List)
+        if dialog.exec():
+            filenames = dialog.selectedFiles()
+            if filenames:
+                self.main_widget.load_file(filenames[0])
 
     def open_file(self):
         dialog = QFileDialog(self)
