@@ -5,6 +5,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QSurfaceFormat, QAction, QKeySequence
 from PySide6.QtWidgets import QApplication, QWidget, QFileDialog, QGridLayout, QPushButton, QLabel, QMainWindow
 
+from style_manager import StyleManager
 from tile import TileWidget
 
 from tilings.abstract.tiling import Tiling as AbstractTiling
@@ -160,6 +161,17 @@ class MainWindow(QMainWindow):
         file_menu = menu.addMenu("Fichier")
         file_menu.addAction(open_file_action)
         file_menu.addAction(close_action)
+        
+        # Add theme switching actions to a menu
+        theme_menu = menu.addMenu("Thèmes")
+        
+        dark_theme_action = QAction("Thème sombre", self)
+        dark_theme_action.triggered.connect(self.apply_dark_theme)
+        theme_menu.addAction(dark_theme_action)
+        
+        light_theme_action = QAction("Thème clair", self)
+        light_theme_action.triggered.connect(self.apply_light_theme)
+        theme_menu.addAction(light_theme_action)
 
         # Spherical tilings
         sph_34_action = QAction(SphTiling34.CODE, self)
@@ -253,6 +265,12 @@ class MainWindow(QMainWindow):
         status_bar = self.statusBar()
 
         self.render_window = None
+        
+    def apply_dark_theme(self):
+        StyleManager.apply_dark_theme(QApplication.instance())
+    
+    def apply_light_theme(self):
+        StyleManager.apply_light_theme(QApplication.instance())
 
     def open_file(self):
         dialog = QFileDialog(self)
@@ -271,11 +289,17 @@ if __name__ == '__main__':
     qs_format = QSurfaceFormat()
     qs_format.setVersion(4, 1)
     qs_format.setProfile(QSurfaceFormat.CoreProfile)
-    qs_format.setSamples(4)
+    qs_format.setSamples(4)  # Enable antialiasing
     QSurfaceFormat.setDefaultFormat(qs_format)
 
-    # Create and show the application and widget
+    # Create the application
     app = QApplication([])
+    
+    # Apply styling using the StyleManager class
+    StyleManager.apply_dark_theme(app)
+    # Or if you prefer a light theme:
+    # StyleManager.apply_light_theme(app)
+    
     w = MainWindow()
     w.show()
     sys.exit(app.exec())
