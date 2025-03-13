@@ -7,6 +7,7 @@ from PySide6.QtWidgets import QApplication, QWidget, QFileDialog, QGridLayout, Q
 
 from style_manager import StyleManager
 from tile import TileWidget
+from render_window import RenderWindow
 
 from tilings.abstract.tiling import Tiling as AbstractTiling
 
@@ -156,12 +157,20 @@ class MainWindow(QMainWindow):
         close_action = QAction("Fermer", self)
         close_action.setShortcut(self.tr("CTRL+W"))
         close_action.triggered.connect(self.close)
-
+        
+        # Create a new action for opening the render window
+        render_action = QAction("Dessiner le pavage", self)
+        render_action.triggered.connect(self.open_render_window)
+        
         menu = self.menuBar()
         file_menu = menu.addMenu("Fichier")
         file_menu.addAction(open_file_action)
         file_menu.addAction(close_action)
         
+        # Add a new menu for drawing
+        draw_menu = menu.addMenu("Dessin")
+        draw_menu.addAction(render_action)
+
         # Add theme switching actions to a menu
         theme_menu = menu.addMenu("Thèmes")
         
@@ -172,6 +181,7 @@ class MainWindow(QMainWindow):
         light_theme_action = QAction("Thème clair", self)
         light_theme_action.triggered.connect(self.apply_light_theme)
         theme_menu.addAction(light_theme_action)
+
 
         # Spherical tilings
         sph_34_action = QAction(SphTiling34.CODE, self)
@@ -266,11 +276,26 @@ class MainWindow(QMainWindow):
 
         self.render_window = None
         
+
+    def open_render_window(self):
+        """
+        Open a new window to render the tiling
+        """
+        # Create a new render window each time or reuse existing one
+        if self.render_window is None or not self.render_window.isVisible():
+            self.render_window = RenderWindow(self)  # Pass self (MainWindow) as a reference
+        
+        # Show the window
+        self.render_window.show()
+        self.render_window.raise_()
+        self.render_window.activateWindow()
+
     def apply_dark_theme(self):
         StyleManager.apply_dark_theme(QApplication.instance())
     
     def apply_light_theme(self):
         StyleManager.apply_light_theme(QApplication.instance())
+
 
     def open_file(self):
         dialog = QFileDialog(self)
