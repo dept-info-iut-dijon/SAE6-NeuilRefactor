@@ -4,10 +4,10 @@ from tilings.euclidean.tiling import Tiling as AbstractTiling
 from tilings.euclidean.tiling import TilingDrawing as AbstractTilingDrawing
 from tilings.euclidean.tiling import TilingOptions as AbstractTilingOptions
 from utils.triangles import apex_permutation_angle
-
+from utils.path_helper import get_resource_path
 
 class TilingDrawing(AbstractTilingDrawing):
-    FRAGMENT_SHADER = "tilings/euclidean/p4g/fragment.glsl"
+    FRAGMENT_SHADER = get_resource_path("tilings/euclidean/p4g/fragment.glsl")
 
     def __init__(self, parent: 'Tiling', path, img_size, corners):
         super(TilingDrawing, self).__init__(parent, path, img_size, corners)

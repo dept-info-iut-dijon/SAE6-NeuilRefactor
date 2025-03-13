@@ -7,13 +7,14 @@ from tilings.euclidean.tiling import SHAPE_KEY_PARALLELOGRAM, SHAPE_KEY_RECTANGL
 from tilings.euclidean.tiling import Tiling as AbstractTiling
 from tilings.euclidean.tiling import TilingDrawing as AbstractTilingDrawing
 from tilings.euclidean.tiling import TilingOptions as AbstractTilingOptions
+from utils.path_helper import get_resource_path
 
 ROTATION_X = 0
 ROTATION_Y = 1
 
 
 class TilingDrawing(AbstractTilingDrawing):
-    FRAGMENT_SHADER = "tilings/euclidean/p2/fragment.glsl"
+    FRAGMENT_SHADER = get_resource_path("tilings/euclidean/p2/fragment.glsl")
 
     def __init__(self, parent: 'Tiling', path, img_size, corners):
         super(TilingDrawing, self).__init__(parent, path, img_size, corners)

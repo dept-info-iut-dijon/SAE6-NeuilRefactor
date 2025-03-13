@@ -6,13 +6,14 @@ from numpy.linalg import inv
 from tilings.euclidean.tiling import Tiling as AbstractTiling, SHAPE_KEY_RECTANGLE, SHAPE_KEY_SQUARE
 from tilings.euclidean.tiling import TilingDrawing as AbstractTilingDrawing
 from tilings.euclidean.tiling import TilingOptions as AbstractTilingOptions
+from utils.path_helper import get_resource_path
 
 GLIDE_X = 0
 GLIDE_Y = 1
 
 
 class TilingDrawing(AbstractTilingDrawing):
-    FRAGMENT_SHADER = "tilings/euclidean/pg/fragment.glsl"
+    FRAGMENT_SHADER = get_resource_path("tilings/euclidean/pg/fragment.glsl")
 
     def __init__(self, parent: 'Tiling', path, img_size, corners):
         super(TilingDrawing, self).__init__(parent, path, img_size, corners)
