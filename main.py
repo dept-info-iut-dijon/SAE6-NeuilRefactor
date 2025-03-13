@@ -287,17 +287,6 @@ class MainWindow(QMainWindow):
             if filenames:
                 self.main_widget.load_file(filenames[0])
 
-    def open_file(self):
-        dialog = QFileDialog(self)
-        dialog.setDirectory(r'/Users/lamiremi/Downloads')
-        dialog.setFileMode(QFileDialog.FileMode.ExistingFiles)
-        dialog.setNameFilter("Images (*.png *.jpg)")
-        dialog.setViewMode(QFileDialog.ViewMode.List)
-        if dialog.exec():
-            filenames = dialog.selectedFiles()
-            if filenames:
-                self.main_widget.load_file(filenames[0])
-
 
 if __name__ == '__main__':
     # Set the surface format before creating the application instance
