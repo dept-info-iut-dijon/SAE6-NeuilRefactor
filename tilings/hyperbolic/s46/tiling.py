@@ -1,6 +1,7 @@
-from PySide6.QtGui import QMatrix3x3, QVector2D
-from PySide6.QtWidgets import QFormLayout, QLabel
+from PySide6.QtGui import QColor, QMatrix3x3, QVector2D, QVector4D
+from PySide6.QtWidgets import QFormLayout, QLabel, QColorDialog, QPushButton
 from numpy import array, pi
+import OpenGL.GL as GL
 
 from tilings.abstract.tiling import Tiling as AbstractTiling
 from tilings.abstract.tiling import TilingDrawing as AbstractTilingDrawing
@@ -20,6 +21,11 @@ class TilingDrawing(AbstractTilingDrawing):
 
     def __init__(self, parent: 'Tiling', path, img_size, corners):
         super(TilingDrawing, self).__init__(parent, path, img_size, corners)
+
+    def initializeGL(self):
+        super().initializeGL()
+        GL.glEnable(GL.GL_BLEND)
+        GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA)
 
     def setup_uniforms(self):
         self.program.setUniformValue("resolution", self.parent().resolution)
@@ -68,6 +74,10 @@ class TilingDrawing(AbstractTilingDrawing):
         self.program.setUniformValue("tileCorner2", self.rescaled_corners[2])
         self.program.setUniformValue("tileCorner3", self.rescaled_corners[3])
 
+        bg_color = self.parent().background_color
+        self.program.setUniformValue("backgroundColor", 
+            QVector4D(bg_color.redF(), bg_color.greenF(), bg_color.blueF(), bg_color.alphaF()))
+
 
 class TilingOptions(AbstractTilingOptions):
     def __init__(self, parent: 'Tiling'):
@@ -77,9 +87,23 @@ class TilingOptions(AbstractTilingOptions):
 
         self.layout = QFormLayout()
         self.setLayout(self.layout)
+        self.background_color_button = QPushButton("Choisir la couleur de fond")
+        self.background_color_button.clicked.connect(self.choose_background_color)
+        self.color_dialog = QColorDialog()
+        self.color_dialog.setOption(QColorDialog.ShowAlphaChannel)
+        self.layout.addRow("Couleur de fond:", self.background_color_button)
 
-        self.label = QLabel("Pas d'options pour ce pavage")
-        self.layout.addRow(self.label)
+    def choose_background_color(self):
+        self.color_dialog.setCurrentColor(self.parent().background_color)
+        
+        if self.color_dialog.exec() == QColorDialog.Accepted:
+            color = self.color_dialog.currentColor()
+            print(f"Couleur sélectionnée : {color.name()}")
+            self.parent().background_color = color
+            self.parent().drawing.setup_uniforms()
+            self.parent().drawing.update()
+        else:
+            print("Aucune couleur valide sélectionnée.")
 
 
 class Tiling(AbstractTiling):
@@ -92,3 +116,4 @@ class Tiling(AbstractTiling):
 
     def __init__(self, path, img_size, corners, resolution=None):
         super(Tiling, self).__init__(path, img_size, corners, resolution)
+        self.background_color = QColor(255, 255, 255, 255)
