@@ -3,7 +3,7 @@ from typing import Optional, Type
 
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QSurfaceFormat, QAction, QKeySequence
-from PySide6.QtWidgets import QApplication, QWidget, QFileDialog, QGridLayout, QPushButton, QLabel, QMainWindow
+from PySide6.QtWidgets import QApplication, QWidget, QFileDialog, QGridLayout, QPushButton, QLabel, QMainWindow, QTextBrowser, QDialog, QVBoxLayout
 
 from style_manager import StyleManager
 from tile import TileWidget
@@ -271,6 +271,11 @@ class MainWindow(QMainWindow):
 
         hyperbolic_menu = menu.addMenu("Pavages hyperboliques")
         hyperbolic_menu.addAction(hyp_46_action)
+        
+        help_menu = menu.addMenu("Aide")
+        help_action = QAction("Afficher l'aide", self)
+        help_action.triggered.connect(self.show_help)
+        help_menu.addAction(help_action)
 
         status_bar = self.statusBar()
 
@@ -307,7 +312,66 @@ class MainWindow(QMainWindow):
             filenames = dialog.selectedFiles()
             if filenames:
                 self.main_widget.load_file(filenames[0])
+                
+    def show_help(self):
+        self.help_window = HelpWindow(self)
+        self.help_window.show()
 
+
+class HelpWindow(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Aide")
+        self.setGeometry(200, 200, 550, 450)
+
+        layout = QVBoxLayout()
+
+        self.help_text = QTextBrowser(self)
+        self.help_text.setOpenExternalLinks(True)  # Permet l'ouverture des liens externes
+        self.help_text.setHtml("""
+            <style>
+                h2 { text-align: center; }
+                h3 { color: #0055aa; margin-top: 20px; }
+                kbd { background-color: #e2e2e2; }
+                li { margin-top: 5px; }
+                ul { margin-bottom: 3px; }
+            </style>
+            
+            <h2>Aide sur l'application</h2>
+            <p>Bienvenue dans l'application de pavage !</p>
+
+            <h3>Fonctionnalités principales :</h3>
+            <ul>
+                <li>Charger une image ou la dessiner pour la tuiler</li>
+                <li>Choisir un type de pavage (sphérique, euclidien, hyperbolique)</li>
+                <li>Dessiner un pavage</li>
+            </ul>
+
+            <h3>Raccourcis clavier :</h3>
+            <ul>
+                <li><kbd>Ctrl + O</kbd> : Ouvrir une image</li>
+                <li><kbd>Ctrl + W</kbd> : Fermer l'application</li>
+                <li><kbd>Échap</kbd> : Fermer cette aide</li>
+            </ul>
+
+            <h3>Ressources utiles :</h3>
+            <ul>
+                <li>Qu'est-ce qu'un pavage ?
+                    <ul>
+                        <li><a href='https://fr.wikipedia.org/wiki/Pavage'>Pavage du plan (Wikipedia)</a></li>
+                        <li><a href='https://fr.wikipedia.org/wiki/Pavage_par_des_polygones_r%C3%A9guliers'>Pavages par des polygones réguliers (Wikipedia)</a></li>
+                        <li><a href='https://fr.wikipedia.org/wiki/Pavage_de_la_sph%C3%A8re'>Pavage de la sphère (Wikipedia)</a></li>
+                        <li><a href='https://www.imo.universite-paris-saclay.fr/~yves.benoist/prepubli/01pavage.pdf'>Pavages du plan par Yves Benoist (pdf)</a></li>
+                    </ul>
+                </li>
+                <li><a href='https://doc.qt.io/qt-6/qtimageformats-index.html'>Formats d'image compatibles</a></li>
+            </ul>
+
+            <p>Besoin d'aide supplémentaire ? Consultez la documentation ou contactez le support.</p>
+        """)
+        
+        layout.addWidget(self.help_text)
+        self.setLayout(layout)
 
 if __name__ == '__main__':
     # Set the surface format before creating the application instance
