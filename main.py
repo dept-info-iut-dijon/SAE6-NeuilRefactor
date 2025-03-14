@@ -61,11 +61,6 @@ class MainWidget(QWidget):
         self.layout.addWidget(self.render_btn, 2, 1)
         self.render_btn.setEnabled(False)
 
-        self.export_btn = QPushButton("Exporter en image")
-        self.export_btn.clicked.connect(self.export_image)
-        self.layout.addWidget(self.export_btn, 2, 2)
-        self.export_btn.setEnabled(False)
-
         self.update_status_tip()
 
         self.show()
@@ -117,7 +112,6 @@ class MainWidget(QWidget):
             return
 
         self.render_btn.setEnabled(True)
-        self.export_btn.setEnabled(True)
 
     def update_status_tip(self):
         """
@@ -145,10 +139,6 @@ class MainWidget(QWidget):
             return
 
         self.parent().statusBar().showMessage("Dessiner le pavage")
-
-    def export_image(self):
-        """Capture le pavage actuel et l'exporte en image."""
-        return #TO-DO
 
 class MainWindow(QMainWindow):
 
