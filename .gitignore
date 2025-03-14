@@ -1,6 +1,5 @@
 # Dossiers et fichiers de compilation PyInstaller
 build/
-dist/
 *.spec
 
 # Caches Python
