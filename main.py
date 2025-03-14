@@ -331,7 +331,6 @@ class HelpWindow(QDialog):
             <style>
                 h2 { text-align: center; }
                 h3 { color: #0055aa; margin-top: 20px; }
-                kbd { background-color: #e2e2e2; }
                 li { margin-top: 5px; }
                 ul { margin-bottom: 3px; }
             </style>
