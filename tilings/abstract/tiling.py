@@ -1,11 +1,15 @@
 from abc import abstractmethod
+
+import tkinter as tk
+from tkinter import filedialog
+
 from typing import List
 from OpenGL import GL
 from PySide6.QtCore import QSize, QPointF
 from PySide6.QtGui import QImage
 from PySide6.QtOpenGL import QOpenGLShaderProgram, QOpenGLShader, QOpenGLTexture
 from PySide6.QtOpenGLWidgets import QOpenGLWidget
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QFileDialog
 from numpy import array, float32
 from utils.path_helper import get_resource_path
 
@@ -157,7 +161,20 @@ class Tiling(QWidget):
         """
         Capture l'image du pavage et l'enregistre sous forme d'image.
         """ 
-        return #To-Do
+        root = tk.Tk()
+        root.withdraw()  # Masquer la fenêtre principale Tkinter
+        file_path = filedialog.asksaveasfilename(
+            defaultextension=".png",
+            filetypes=[("Images PNG", "*.png"), ("Images JPG", "*.jpg")],
+            title="Exporter l'image")
+
+        if not file_path:  # Si l'utilisateur annule
+            return
+        
+        screen = self.drawing.window().screen()
+        pixmap = screen.grabWindow(self.drawing.winId())
+
+        pixmap.save(file_path)
 
     def reset_tiling(self, new_corners):
         """
