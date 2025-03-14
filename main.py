@@ -140,7 +140,6 @@ class MainWidget(QWidget):
 
         self.parent().statusBar().showMessage("Dessiner le pavage")
 
-
 class MainWindow(QMainWindow):
 
     def __init__(self):
@@ -345,6 +344,7 @@ class HelpWindow(QDialog):
                 <li>Charger une image ou la dessiner pour la tuiler</li>
                 <li>Choisir un type de pavage (sphérique, euclidien, hyperbolique)</li>
                 <li>Dessiner un pavage</li>
+                <li>Exporter le pavage en image</li>
             </ul>
 
             <h3>Raccourcis clavier :</h3>

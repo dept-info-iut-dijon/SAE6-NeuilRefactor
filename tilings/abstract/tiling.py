@@ -1,12 +1,15 @@
 from abc import abstractmethod
-from typing import List
 
+import tkinter as tk
+from tkinter import filedialog
+
+from typing import List
 from OpenGL import GL
 from PySide6.QtCore import QSize, QPointF
 from PySide6.QtGui import QImage
 from PySide6.QtOpenGL import QOpenGLShaderProgram, QOpenGLShader, QOpenGLTexture
 from PySide6.QtOpenGLWidgets import QOpenGLWidget
-from PySide6.QtWidgets import QWidget, QVBoxLayout
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QFileDialog
 from numpy import array, float32
 from utils.path_helper import get_resource_path
 
@@ -141,6 +144,9 @@ class Tiling(QWidget):
 
         self.resolution = resolution if resolution is not None else QSize(600, 600)
         self.setWindowTitle(self.KIND)
+        
+        self.export_button = QPushButton("Exporter l'image", self)
+        self.export_button.clicked.connect(self.export_image)
 
         self.options = self.OPTIONS_CLASS.init(self)
         self.drawing = self.DRAWING_CLASS.init(self, path, img_size, corners)
@@ -149,6 +155,26 @@ class Tiling(QWidget):
         self.setLayout(self.layout)
         self.layout.addWidget(self.drawing)
         self.layout.addWidget(self.options)
+        self.layout.addWidget(self.export_button)
+        
+    def export_image(self):
+        """
+        Capture l'image du pavage et l'enregistre sous forme d'image.
+        """ 
+        root = tk.Tk()
+        root.withdraw()  # Masquer la fenêtre principale Tkinter
+        file_path = filedialog.asksaveasfilename(
+            defaultextension=".png",
+            filetypes=[("Images PNG", "*.png"), ("Images JPG", "*.jpg")],
+            title="Exporter l'image")
+
+        if not file_path:  # Si l'utilisateur annule
+            return
+        
+        screen = self.drawing.window().screen()
+        pixmap = screen.grabWindow(self.drawing.winId())
+
+        pixmap.save(file_path)
 
     def reset_tiling(self, new_corners):
         """
